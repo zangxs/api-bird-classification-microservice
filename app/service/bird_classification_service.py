@@ -12,10 +12,13 @@ class BirdClassificationService:
 
     def classificate_bird(self, request: BirdClassificationRequest) -> BirdClassificationResponse:
 
+        #code here
+
         response = BirdClassificationResponse(
             image_id = request.image_id,
             specie_id = "",
-            specie_confidence = 0
+            specie_confidence = 0,
+            failureReason=""
         )
 
         return response

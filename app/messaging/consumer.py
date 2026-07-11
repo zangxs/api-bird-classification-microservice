@@ -1,10 +1,11 @@
 import json
 import aio_pika
 import boto3
-from app.services.bird_detector_service import BirdDetectorService
-from app.dto.request.bird_request import BirdRequest
 from app.messaging.publisher import Publisher
 from app.config.config import Config
+from app.service.bird_classification_service import BirdClassificationService
+from app.dto.response.bird_classification_response import BirdClassificatonResponse
+from app.dto.request.bird_classification import BirdClassificationRequest
 
 s3_client = boto3.client(
     "s3",
@@ -12,7 +13,6 @@ s3_client = boto3.client(
     aws_secret_access_key=Config.AWS_SECRET_ACCESS_KEY,
     region_name=Config.AWS_REGION
 )
-detector_service = BirdDetectorService()
 
 
 async def start_consumer(connection: aio_pika.RobustConnection):
@@ -20,7 +20,7 @@ async def start_consumer(connection: aio_pika.RobustConnection):
 
     queue = await channel.declare_queue(Config.QUEUE_DETECT_NAME, durable=True)
 
-    detector_service = BirdDetectorService()
+    classification_service = BirdClassificationService()
 
     exchange = await channel.declare_exchange(
         Config.EXCHANGE_NAME,
@@ -35,19 +35,20 @@ async def start_consumer(connection: aio_pika.RobustConnection):
             print("message received")
             payload = json.loads(message.body)
 
-            request = BirdRequest(
+            request = BirdClassificationRequest(
                 image_id=payload["imageEventId"],
                 s3_key=payload["s3Key"],
                 user_id=payload["userId"],
                 image_bytes=download_from_s3(payload["s3Key"])
             )
 
-            response = detector_service.detect_bird(request)
+            response = classification_service.classificate_bird(request)
 
             await publisher.publish(
                 image_event_id=response.image_id,
-                is_bird=response.is_bird,
-                confidence=response.confidence
+                specie_id=response.specie_id,
+                specie_confidence=response.specie_confidence,
+                failure_reason=response.failure_reason
             )
 
     await queue.consume(handle_message)
