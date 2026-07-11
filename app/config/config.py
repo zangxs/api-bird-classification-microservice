@@ -7,10 +7,8 @@ class Config():
     #RabbitMQ
     RABBITMQ_URL = os.getenv("RABBITMQ_URL", "amqp://user:password@localhost:5672/")
     QUEUE_CLASSIFICATION_NAME = os.getenv("QUEUE_CLASSIFICATION_NAME", "bird_classification.queue")
-    CLASSIFICATION_RESULT_QUEUE_NAME = os.getenv("CLASSIFICATION_RESULT_QUEUE_NAME", "bird_classification.result.queue")
     EXCHANGE_NAME = os.getenv("EXCHANGE_NAME","bird_detection.exchange")
     RESULT_ROUTING_KEY = os.getenv("RESULT_ROUTING_KEY","bird_classification.result")
-    CLASSIFICATION_ROUTING_KEY=os.getenv("CLASSIFICATION_ROUTING_KEY","bird_classification.pending")
 
     
     # AWS S3

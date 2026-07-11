@@ -18,7 +18,7 @@ s3_client = boto3.client(
 async def start_consumer(connection: aio_pika.RobustConnection):
     channel = await connection.channel()
 
-    queue = await channel.declare_queue(Config.QUEUE_DETECT_NAME, durable=True)
+    queue = await channel.declare_queue(Config.QUEUE_CLASSIFICATION_NAME, durable=True)
 
     classification_service = BirdClassificationService()
 
