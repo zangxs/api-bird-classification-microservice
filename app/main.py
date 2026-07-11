@@ -1,17 +1,20 @@
-from contextlib import asynccontextmanager
-from app.messaging.consumer import start_consumer
+import asyncio
+
 import aio_pika
 from app.config.config import Config
-from app.messaging.publisher import Publisher
+from app.messaging.consumer import start_consumer
 
 
-@asynccontextmanager
-async def lifespan():
+async def main():
+    Config.validate()
     connection = await aio_pika.connect_robust(Config.RABBITMQ_URL)
-    channel = await connection.channel()
+    try:
+        await start_consumer(connection)
+        print("Bird classification consumer started, waiting for messages...")
+        await asyncio.Event().wait()
+    finally:
+        await connection.close()
 
-    result_publisher = Publisher(channel)
-    await start_consumer(connection)
 
-    yield
-    await connection.close()
+if __name__ == "__main__":
+    asyncio.run(main())

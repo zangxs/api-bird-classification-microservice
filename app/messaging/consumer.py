@@ -4,7 +4,6 @@ import boto3
 from app.messaging.publisher import Publisher
 from app.config.config import Config
 from app.service.bird_classification_service import BirdClassificationService
-from app.dto.response.bird_classification_response import BirdClassificatonResponse
 from app.dto.request.bird_classification import BirdClassificationRequest
 
 s3_client = boto3.client(
@@ -38,7 +37,6 @@ async def start_consumer(connection: aio_pika.RobustConnection):
             request = BirdClassificationRequest(
                 image_id=payload["imageEventId"],
                 s3_key=payload["s3Key"],
-                user_id=payload["userId"],
                 image_bytes=download_from_s3(payload["s3Key"])
             )
 
@@ -46,7 +44,7 @@ async def start_consumer(connection: aio_pika.RobustConnection):
 
             await publisher.publish(
                 image_event_id=response.image_id,
-                specie_id=response.specie_id,
+                scientific_name=response.scientific_name,
                 specie_confidence=response.specie_confidence,
                 failure_reason=response.failure_reason
             )
