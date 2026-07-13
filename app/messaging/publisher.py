@@ -1,19 +1,21 @@
 import json
 import aio_pika
 from app.config.config import Config
+from app.dto.response.species_alternative import SpeciesAlternative
 
 
 class Publisher:
     def __init__(self, exchange: aio_pika.Exchange):
         self.exchange = exchange
 
-    async def publish(self, image_event_id: str, scientific_name: str, specie_confidence: float, failure_reason: str):
+    async def publish(self, image_event_id: str, scientific_name: str, specie_confidence: float, failure_reason: str, alternatives: list[SpeciesAlternative]):
 
         payload = {
             "imageEventId": image_event_id,
             "scientificName": scientific_name,
             "specieConfidence": specie_confidence,
-            "failureReason": failure_reason
+            "failureReason": failure_reason,
+            "alternatives" : alternatives
         }
 
         print("publishing result: ", payload)

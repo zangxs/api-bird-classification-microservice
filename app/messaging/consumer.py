@@ -46,7 +46,8 @@ async def start_consumer(connection: aio_pika.RobustConnection):
                 image_event_id=response.image_id,
                 scientific_name=response.scientific_name,
                 specie_confidence=response.specie_confidence,
-                failure_reason=response.failure_reason
+                failure_reason=response.failure_reason,
+                alternatives=response.alternatives
             )
 
     await queue.consume(handle_message)
