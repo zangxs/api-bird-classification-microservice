@@ -1,4 +1,5 @@
 from pydantic import BaseModel, ConfigDict, Field
+from app.dto.response.species_alternative import SpeciesAlternative
 
 class BirdClassificationResponse(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
@@ -7,3 +8,4 @@ class BirdClassificationResponse(BaseModel):
     scientific_name: str = Field(alias="scientificName")
     specie_confidence: float = Field(alias="specieConfidence")
     failure_reason: str = Field(alias="failureReason")
+    alternatives: list[SpeciesAlternative] = []
