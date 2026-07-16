@@ -15,7 +15,7 @@ class Publisher:
             "scientificName": scientific_name,
             "specieConfidence": specie_confidence,
             "failureReason": failure_reason,
-            "alternatives" : alternatives
+            "alternatives": [alternative.model_dump(by_alias=True) for alternative in alternatives]
         }
 
         print("publishing result: ", payload)
