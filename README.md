@@ -84,7 +84,7 @@ Esto valida la configuración, se conecta a RabbitMQ, arranca el consumer sobre
 llegan mensajes; eso es esperado). Deténlo con `Ctrl+C`.
 
 No hay servidor HTTP en este repo — es un proceso consumer puro. Sí hay `Dockerfile` (ver
-`../DOCKER.md` en la raíz del workspace para levantarlo junto con el resto de servicios vía
+`../DOCKER.md` en [el orquestador](https://github.com/zangxs/api-bird-orchestator-microservice) para levantarlo junto con el resto de servicios vía
 `docker compose`); el modelo se monta como volumen en tiempo de ejecución, no se descarga durante
 el build.
 
