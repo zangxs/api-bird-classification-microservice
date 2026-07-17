@@ -1,6 +1,0 @@
-aio-pika
-boto3
-python-dotenv
-fastai
-torch
-torchvision

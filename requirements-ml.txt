@@ -1,0 +1,6 @@
+fastai==2.8.7
+torch==2.13.0
+torchvision==0.28.0
+aio-pika
+boto3
+python-dotenv

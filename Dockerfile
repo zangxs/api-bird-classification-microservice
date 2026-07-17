@@ -7,8 +7,12 @@ RUN apt-get update \
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# requirements-ml.txt is byte-identical to api-bird-detection-microservice's copy, so this layer
+# (the ~3GB fastai/torch/torchvision install) hashes the same in both builds and Docker
+# stores/caches it once instead of once per service. All of this service's deps live here — no
+# service-specific requirements.txt needed.
+COPY requirements-ml.txt .
+RUN pip install --no-cache-dir -r requirements-ml.txt
 
 COPY app ./app
 
