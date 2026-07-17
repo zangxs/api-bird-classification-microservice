@@ -53,8 +53,16 @@ falla al iniciar en `load_learner(...)` — es la señal esperada, no un bug.
 ```bash
 python -m venv env
 source env/bin/activate
-pip install -r requirements.txt
+pip install -r requirements-ml.txt
 ```
+
+Todas las deps de este servicio viven en `requirements-ml.txt` (no hay un `requirements.txt` propio):
+`fastai==2.8.7`, `torch==2.13.0`, `torchvision==0.28.0` — versiones fijadas para que coincidan con el
+venv en el que se entrenaron los modelos — más `aio-pika`/`boto3`/`python-dotenv`. Este archivo es
+idéntico byte a byte al de `../api-bird-detection-microservice/requirements-ml.txt`: en Docker eso
+permite que ambas imágenes compartan en disco la capa pesada (~8.9GB de `torch`/`fastai`) en vez de
+pagarla cada una por separado — ver `../api-bird-orchestator-microservice/DOCKER.md` para el detalle
+del tamaño de imagen.
 
 ## Configuración
 
